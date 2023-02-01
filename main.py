@@ -10,11 +10,11 @@ import numpy as np
 
 deta = Deta(st.secrets["deta_key"])
 Global = deta.Base("Global")
-db = deta.Base('Kitay')
-Attak_Kitay=deta.Base('Attak_Kitay')
+db = deta.Base('Japan')
+Attak_Japan=deta.Base('Attak_Japan')
 Graph=deta.Base('Photo_Url')
 
-city=Global.get('Kitay')
+city=Global.get('Japan')
 money=city['money']-((city['sunks_of_you']*50)+(city['sunks_for_you']*100))
 st.set_page_config(
 
@@ -45,10 +45,10 @@ attak4=[]
 
 if menu=='Ракета':
     st.write('Количество ваших ракет:',city['roket'])
-    country = st.multiselect('Какие страны атакуем?',['Япония', 'Северная-Коррея', 'Пакистан', 'Афганистан','Сирия'])
+    country = st.multiselect('Какие страны атакуем?',['Китай', 'Северная-Коррея', 'Пакистан', 'Афганистан','Сирия'])
     for l in range(0,len(country)):
         if country[l]=='Япония':
-            attak=st.multiselect('Какие города атакуем в Японии?',['Йокогама','Токио','Киото','Осака',])
+            attak=st.multiselect('Какие города атакуем в Китае?',['Пекин','Шанхай','Гуанчжоу','Гонконг',])
         if country[l]=='Северная-Коррея':
             attak1=st.multiselect('Какие города атакуем в Северной-Коррее?',['Пхеньян','Расон','Хусан','Вонсан',])
         if country[l]=='Пакистан':
@@ -67,8 +67,8 @@ if menu=='Ракета':
                     count=5-len(country)
                     for lll in range(0,count):
                         country.append(' ')
-            Attak_Kitay.put({'Country':str(country[0])+str(attak),'Country1':str(country[1])+str(attak1),'Country2':str(country[2])+str(attak2),'Country3':str(country[3])+str(attak3),'Country4':str(country[4])+str(attak4)})
-            db_content = Attak_Kitay.fetch().items
+            Attak_Japan.put({'Country':str(country[0])+str(attak),'Country1':str(country[1])+str(attak1),'Country2':str(country[2])+str(attak2),'Country3':str(country[3])+str(attak3),'Country4':str(country[4])+str(attak4)})
+            db_content = Attak_Japan.fetch().items
             st.write(db_content)
             with st.spinner('Wait for it...'):
                 time.sleep(1)
@@ -81,37 +81,37 @@ if menu=='Улучшения':
     st.write('Деньги:',money)
 
     st.write('Какие города вы хотите улучшить?')
-    up = st.checkbox('Пекин')
+    up = st.checkbox('Йокогама')
     if up:
         masiv_up[0]+=1
         money-=200
-    up1 = st.checkbox('Шанхай')
+    up1 = st.checkbox('Токио')
     if up1:
         masiv_up[1] += 1
         money -= 200
-    up2 = st.checkbox('Гуанчжоу')
+    up2 = st.checkbox('Киото')
     if up2:
         masiv_up[2] += 1
         money -= 200
-    up3 = st.checkbox('Гонконг')
+    up3 = st.checkbox('Осака')
     if up3:
         masiv_up[3] += 1
         money -= 200
 
     st.write('На какие города установим щиты?')
-    shit = st.checkbox('Пекин ')
+    shit = st.checkbox('Йокогама ')
     if shit:
         masiv_shit[0]+='🛡️'
         money-=400
-    shit1 = st.checkbox('Шанхай ')
+    shit1 = st.checkbox('Токио ')
     if shit1:
         masiv_shit[1]+='🛡️'
         money -= 400
-    shit2 = st.checkbox('Гуанчжоу ')
+    shit2 = st.checkbox('Киото ')
     if shit2:
         masiv_shit[2]+='🛡️'
         money -= 400
-    shit3 = st.checkbox('Гонконг ')
+    shit3 = st.checkbox('Осака ')
     if shit3:
         masiv_shit[3]+='🛡️'
         money -= 400
@@ -120,16 +120,16 @@ if menu=='Улучшения':
     st.write('Вы получите в следующие количество ракет', number)
     money -= 500 * number
 
-    sunks_for_who = st.multiselect('На какие страны вы хотите наложить санкции?', ['Япония', 'Северная-Коррея', 'Пакистан', 'Афганистан', 'Сирия'])
+    sunks_for_who = st.multiselect('На какие страны вы хотите наложить санкции?', ['Китай', 'Северная-Коррея', 'Пакистан', 'Афганистан', 'Сирия'])
     money-= 50*len(sunks_for_who)
 
     st.write('Ваш баланс после операции:', money)
 
     col1, col2, col3,col4= st.columns(4)
-    col1.metric('🏠'+city['shit1']+masiv_shit[0]+'Пекин','⚙️'+str(60+10*city['up1']+10*masiv_up[0])+'%'+' 🌳 '+str(72+ (10*city['up1']+10*masiv_up[0])- (city['debaf1']*20))+'%',masiv_up[0]*10)
-    col2.metric('🏠'+city['shit2']+masiv_shit[1]+'Шанхай','⚙️'+str(50+10*city['up2']+10*masiv_up[1])+'%'+' 🌳 '+str(54+ (10*city['up2']+10*masiv_up[1])- - (city['debaf2']*20))+'%',masiv_up[1]*10)
-    col3.metric('🏠'+city['shit3']+masiv_shit[2]+'Гуанчжоу','⚙️'+str(50+10*city['up3']+10*masiv_up[2])+'%'+' 🌳 '+str(54+ (10*city['up3']+10*masiv_up[2])- (city['debaf3']*20))+'%',masiv_up[2]*10)
-    col4.metric('🏠'+city['shit4']+masiv_shit[3]+'Гонконг','⚙️'+str(40+10*city['up4']+10*masiv_up[3])+'%'+' 🌳 '+str(36+ (10*city['up4']+10*masiv_up[3])- (city['debaf4']*20))+'%',masiv_up[3]*10)
+    col1.metric('🏠'+city['shit1']+masiv_shit[0]+'Йокогама','⚙️'+str(60+10*city['up1']+10*masiv_up[0])+'%'+' 🌳 '+str(72+ (10*city['up1']+10*masiv_up[0])- (city['debaf1']*20))+'%',masiv_up[0]*10)
+    col2.metric('🏠'+city['shit2']+masiv_shit[1]+'Токио','⚙️'+str(50+10*city['up2']+10*masiv_up[1])+'%'+' 🌳 '+str(54+ (10*city['up2']+10*masiv_up[1])- - (city['debaf2']*20))+'%',masiv_up[1]*10)
+    col3.metric('🏠'+city['shit3']+masiv_shit[2]+'Киото','⚙️'+str(50+10*city['up3']+10*masiv_up[2])+'%'+' 🌳 '+str(54+ (10*city['up3']+10*masiv_up[2])- (city['debaf3']*20))+'%',masiv_up[2]*10)
+    col4.metric('🏠'+city['shit4']+masiv_shit[3]+'Осака','⚙️'+str(40+10*city['up4']+10*masiv_up[3])+'%'+' 🌳 '+str(36+ (10*city['up4']+10*masiv_up[3])- (city['debaf4']*20))+'%',masiv_up[3]*10)
 
     if st.button('Отправить данные'):
         if money>=0:
@@ -145,17 +145,17 @@ if menu=='Улучшения':
 
 if menu=='Стартовая страница':
     '''# Привет!
-    Вы играете за Китай'''
+    Вы играете за Японию'''
 
     st.write('Деньги:', money)
     st.write('Ракеты:', city['roket'])
     st.write('Санкции наложеные вами:',city['sunks_of_you'])
     st.write('Санкции наложеные на вас:',city['sunks_for_you'])
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric('🏠' + city['shit1'] + 'Пекин','⚙️' + str(60 + 10 * city['up1']) + '%' + ' 🌳 ' + str(72 + 10 * city['up1']- (city['debaf1']*20)) + '%')
-    col2.metric('🏠' + city['shit2'] + 'Шанхай','⚙️' + str(50 + 10 * city['up2']) + '%' + ' 🌳 ' + str(54 + 10 * city['up2']- (city['debaf2']*20)) + '%')
-    col3.metric('🏠' + city['shit3'] + 'Гуанчжоу','⚙️' + str(50 + 10 * city['up3']) + '%' + ' 🌳 ' + str(54 + 10 * city['up3']- (city['debaf3']*20)) + '%')
-    col4.metric('🏠' + city['shit4'] + 'Гонконг','⚙️' + str(40 + 10 * city['up4']) + '%' + ' 🌳 ' + str(36 + 10 * city['up4']- (city['debaf4']*20)) + '%')
+    col1.metric('🏠' + city['shit1'] + 'Йокогама','⚙️' + str(60 + 10 * city['up1']) + '%' + ' 🌳 ' + str(72 + 10 * city['up1']- (city['debaf1']*20)) + '%')
+    col2.metric('🏠' + city['shit2'] + 'Токио','⚙️' + str(50 + 10 * city['up2']) + '%' + ' 🌳 ' + str(54 + 10 * city['up2']- (city['debaf2']*20)) + '%')
+    col3.metric('🏠' + city['shit3'] + 'Киото','⚙️' + str(50 + 10 * city['up3']) + '%' + ' 🌳 ' + str(54 + 10 * city['up3']- (city['debaf3']*20)) + '%')
+    col4.metric('🏠' + city['shit4'] + 'Осака','⚙️' + str(40 + 10 * city['up4']) + '%' + ' 🌳 ' + str(36 + 10 * city['up4']- (city['debaf4']*20)) + '%')
     st.image('https://cdn.discordapp.com/attachments/1070077630197534780/1070367870632071238/Graph1.png')
     st.image('https://cdn.discordapp.com/attachments/1070077630197534780/1070367870845988934/Graph2.png')
     st.image('https://cdn.discordapp.com/attachments/1070077630197534780/1070367870380425226/Graph4.png')
